@@ -6,7 +6,7 @@ from TagBlogs.items import BlogEntry
 class CNBlogsEntrySpider(sp.Spider):
     name = 'CNBlogsEntrySpider'
     start_urls = (
-        'http://www.cnblogs.com/'
+        'http://www.cnblogs.com/',
     )
 
     def __init__(self):
@@ -33,4 +33,3 @@ class CNBlogsEntrySpider(sp.Spider):
             entry['pub_time'] = post_item.xpath('div[@class="post_item_body"]/div[@class="post_item_foot"]/text()')\
                 .extract()
             return entry
-

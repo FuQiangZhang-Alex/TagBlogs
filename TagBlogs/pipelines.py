@@ -7,13 +7,22 @@
 import json
 
 
-class CnblogsPipeline(object):
+class TagblogsPipeline(object):
 
     def __init__(self):
         self.file = open(file='blog_entry.json', mode='w')
 
     def process_item(self, item, spider):
-        print(item['header'])
+        print('TagblogsPipeline #2', item['header'])
         line = json.dumps(dict(item)) + '\n'
         self.file.write(line)
         return item
+
+
+class SitemapPipeline(object):
+
+    def __init__(self):
+        pass
+
+    def process_item(self, item, spider):
+        print('SitemapPipeline #1', item)

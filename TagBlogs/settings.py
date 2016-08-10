@@ -13,7 +13,10 @@ BOT_NAME = 'TagBlogs'
 
 SPIDER_MODULES = ['TagBlogs.spiders']
 NEWSPIDER_MODULE = 'TagBlogs.spiders'
-ITEM_PIPELINES = {'TagBlogs.pipelines.TagblogsPipeline': 1}
+ITEM_PIPELINES = {
+    'TagBlogs.pipelines.TagblogsPipeline': 2,
+    'TagBlogs.pipelines.SitemapPipeline': 1
+}
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
