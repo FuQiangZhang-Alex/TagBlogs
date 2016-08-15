@@ -13,7 +13,7 @@ class TagblogsPipeline(object):
         self.file = open(file='blog_entry.json', mode='w')
 
     def process_item(self, item, spider):
-        print('TagblogsPipeline #2', item['header'])
+        print('TagblogsPipeline #2')
         line = json.dumps(dict(item)) + '\n'
         self.file.write(line)
         return item
@@ -25,4 +25,5 @@ class SitemapPipeline(object):
         pass
 
     def process_item(self, item, spider):
-        print('SitemapPipeline #1', item)
+        print('SitemapPipeline #1')
+        return item
