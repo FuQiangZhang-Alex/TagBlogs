@@ -18,6 +18,7 @@ class TagblogsItem(Item):
 class BlogEntry(Item):
     url = Field()  # blog's url, PK
     header = Field()  # blog's header
+    cate = Field()
     summary = Field()  # summary of the blog
     author = Field()  # author of the blog
     author_url = Field()  # author's home page url, May be FK

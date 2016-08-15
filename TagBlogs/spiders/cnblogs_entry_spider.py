@@ -1,6 +1,7 @@
 
 import scrapy as sp
 from TagBlogs.items import BlogEntry
+from Utils.cnblog_sitemap import SitemapSpider
 
 
 class CNBlogsEntrySpider(sp.Spider):
@@ -10,7 +11,17 @@ class CNBlogsEntrySpider(sp.Spider):
     )
 
     def __init__(self):
-        pass
+        ss = SitemapSpider()
+        entries = ss.extract()
+        new_entries = {}
+        for entry in entries:
+            key = entry['url']
+            if entry['cate'] == 'undefined':
+                entry['pages'] = []
+
+            else:
+                entry['pages'] = []
+            new_entries[key] = entry
 
     def parse(self, response):
         selector = sp.Selector(response)
