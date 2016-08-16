@@ -14,8 +14,7 @@ BOT_NAME = 'TagBlogs'
 SPIDER_MODULES = ['TagBlogs.spiders']
 NEWSPIDER_MODULE = 'TagBlogs.spiders'
 ITEM_PIPELINES = {
-    'TagBlogs.pipelines.TagblogsPipeline': 2,
-    'TagBlogs.pipelines.SitemapPipeline': 1
+    'TagBlogs.pipelines.TagblogsPipeline': 1
 }
 
 
@@ -24,6 +23,7 @@ ITEM_PIPELINES = {
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
+LOG_LEVEL = 'INFO'
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32

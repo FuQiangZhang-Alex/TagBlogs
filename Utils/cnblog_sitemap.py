@@ -12,7 +12,7 @@ class SitemapSpider:
 
     def __init__(self, itertag='url'):
         self.itertag = itertag
-        self.http = ul.PoolManager()
+        self.http = ul.PoolManager(num_pools=100)
 
     def extract(self, xpath=''):
         res = self.http.request(method='GET', url=self.start_urls[0])
@@ -30,9 +30,12 @@ class SitemapSpider:
             last_mod = children[1].text
             entry = {'url': url, 'cate': cate, 'lastmod': last_mod}
             page_number = self.get_pages(self, entry=entry)
-            entry['page_number'] = page_number
-            print(entry)
-            entries.append(entry)
+            if page_number > 0:
+                entry['page_number'] = page_number
+                # print(entry)
+                entries.append(entry)
+            else:
+                continue
         return entries
 
     @staticmethod
@@ -46,6 +49,9 @@ class SitemapSpider:
         if entry['cate'] == 'undefined':
             test_url = entry['url'] + 'default.html?page=2'
             test_page = self.http.request(method='GET', url=test_url)
+            response_code = test_page.status
+            if response_code != 200:
+                return 0
             parser = etree.HTMLParser()
             test_page_tree = etree.parse(source=BytesIO(test_page.data), parser=parser)
             pages = test_page_tree.xpath('//div[@id="homepage_top_pager"]/div[@class="pager"]')
@@ -58,17 +64,25 @@ class SitemapSpider:
                     page_numbers = list(map(lambda x: int(x),
                                             list(filter(lambda x: x is not None and x.isnumeric(),
                                                         list(map(lambda x: x.text, strange_pages))))))
-                    return max(page_numbers)
+                    if page_numbers:
+                        return max(page_numbers)
+                    else:
+                        return 1
                 else:
-                    page_number = 1
-                    return page_number
+                    return 1
         else:
             cate_url = entry['url']
             cate_page = self.http.request(method='GET', url=cate_url)
+            cate_response_code = cate_page.status
+            if cate_response_code != 200:
+                return 0
             html_parser = etree.HTMLParser()
             cate_page_tree = etree.parse(source=BytesIO(cate_page.data), parser=html_parser)
             cate_pages = cate_page_tree.xpath('//div[@id="paging_block"]/div[@class="pager"]/*')
             cate_page_numbers = list(map(lambda x: int(x),
                                          list(filter(lambda x: x is not None and x.isnumeric(),
                                                      list(map(lambda x: x.text, cate_pages))))))
-            return max(cate_page_numbers)
+            if cate_page_numbers:
+                return max(cate_page_numbers)
+            else:
+                return 1

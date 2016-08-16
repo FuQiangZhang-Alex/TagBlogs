@@ -7,6 +7,9 @@ from TagBlogs.items import BlogEntry
 
 
 class CNBlogSitemapSpider(SitemapSpider):
+    """
+    abandoned
+    """
     name = 'CNBlogSitemapSpider'
     sitemap_urls = ['http://www.cnblogs.com/sitemap.xml']
     sitemap_rules = [

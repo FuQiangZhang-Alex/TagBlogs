@@ -17,13 +17,3 @@ class TagblogsPipeline(object):
         line = json.dumps(dict(item)) + '\n'
         self.file.write(line)
         return item
-
-
-class SitemapPipeline(object):
-
-    def __init__(self):
-        pass
-
-    def process_item(self, item, spider):
-        print('SitemapPipeline #1')
-        return item
