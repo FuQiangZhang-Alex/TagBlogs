@@ -30,7 +30,7 @@ class CNBlogsEntrySpider(sp.Spider):
                     self.start_urls.append(url + '#p' + str(page_num))
             f = open(file='a.txt', mode='w')
             f.write(str(self.start_urls))
-    #         self.new_entries[url] = entry
+            self.new_entries[url] = entry
 
     def parse(self, response):
         self.logger.info('parse')

@@ -16,6 +16,8 @@ NEWSPIDER_MODULE = 'TagBlogs.spiders'
 ITEM_PIPELINES = {
     'TagBlogs.pipelines.TagblogsPipeline': 1
 }
+MONGO_URI = 'mongodb://localhost:27000/'
+MONGO_DATABASE = 'TagBlogs'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
