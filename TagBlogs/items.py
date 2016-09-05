@@ -23,6 +23,7 @@ class BlogEntry(Item):
     author = Field()  # author of the blog
     author_url = Field()  # author's home page url, May be FK
     pub_time = Field()
+    source = Field()
 
 
 class SitemapEntry(Item):

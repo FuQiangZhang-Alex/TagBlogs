@@ -14,10 +14,12 @@ BOT_NAME = 'TagBlogs'
 SPIDER_MODULES = ['TagBlogs.spiders']
 NEWSPIDER_MODULE = 'TagBlogs.spiders'
 ITEM_PIPELINES = {
-    'TagBlogs.pipelines.TagblogsPipeline': 1
+    'TagBlogs.pipelines.TagblogsPipeSave2Mongo': 2,
+    'TagBlogs.pipelines.TagblogsFilterNoneItem': 1
 }
-MONGO_URI = 'mongodb://localhost:27000/'
+MONGO_URI = 'mongodb://localhost:27017/'
 MONGO_DATABASE = 'TagBlogs'
+LOG_FILE = '/projects/TagBlogs/Logs/cnblogs_spider.log'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
@@ -25,7 +27,7 @@ MONGO_DATABASE = 'TagBlogs'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
-LOG_LEVEL = 'INFO'
+LOG_LEVEL = 'WARNING'  # one of CRITICAL, ERROR, WARNING, INFO, DEBUG
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32

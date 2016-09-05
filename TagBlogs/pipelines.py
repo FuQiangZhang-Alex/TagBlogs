@@ -6,9 +6,10 @@
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import json
 from pymongo import MongoClient
+from scrapy.exceptions import DropItem
 
 
-class TagblogsPipeline(object):
+class TagblogsPipeSave2Mongo(object):
 
     collection_name = 'BlogEntry'
 
@@ -34,8 +35,18 @@ class TagblogsPipeline(object):
         self.client.close()
 
     def process_item(self, item, spider):
-        print('TagblogsPipeline #2')
         line = json.dumps(dict(item)) + '\n'
+        # check if the item already exists
+        # exists = list(self.db[self.collection_name].find(filter={'url': item['url']}, limit=1))
         self.db[self.collection_name].insert(dict(item))
         self.file.write(line)
         return item
+
+
+class TagblogsFilterNoneItem(object):
+
+    def process_item(self, item, spider):
+        if item is None:
+            raise DropItem()
+        else:
+            return item

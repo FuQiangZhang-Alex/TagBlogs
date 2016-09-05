@@ -15,24 +15,22 @@ class SitemapSpider:
         self.http = ul.PoolManager(num_pools=100)
 
     def extract(self, xpath=''):
+        print('SitemapSpider')
         res = self.http.request(method='GET', url=self.start_urls[0])
         xml_tree = etree.parse(source=BytesIO(res.data))
         entries = []
-        for node in xml_tree.iter(tag='{http://www.sitemaps.org/schemas/sitemap/0.9}url'):
-            children = node.getchildren()
+        url_nodes = list(xml_tree.iter(tag='{http://www.sitemaps.org/schemas/sitemap/0.9}url'))
+        print(type(url_nodes))
+        for node in url_nodes:
+            children = node.getchildren()  # subnodes under url node
             url = children[0].text
-            cate_search = regex.search(pattern='(?<=/cate/).+(?=/)', string=url)
-            cate = None
-            if cate_search:
-                cate = cate_search.captures()[0]
-            else:
-                cate = 'undefined'
+            cate_search = regex.search(pattern='(?<=http://www\.cnblogs\.com/cate/).+(?=/)', string=url)
+            cate = cate_search.captures()[0] if cate_search else ''
             last_mod = children[1].text
             entry = {'url': url, 'cate': cate, 'lastmod': last_mod}
             page_number = self.get_pages(self, entry=entry)
             if page_number > 0:
                 entry['page_number'] = page_number
-                # print(entry)
                 entries.append(entry)
             else:
                 continue
@@ -46,11 +44,12 @@ class SitemapSpider:
         :param entry: dict that contains page url and
         :return: the largest page number of the given page
         """
-        if entry['cate'] == 'undefined':
+        if entry['cate'] == '':
             test_url = entry['url'] + 'default.html?page=2'
             test_page = self.http.request(method='GET', url=test_url)
             response_code = test_page.status
             if response_code != 200:
+                print(test_url)
                 return 0
             parser = etree.HTMLParser()
             test_page_tree = etree.parse(source=BytesIO(test_page.data), parser=parser)
@@ -75,6 +74,7 @@ class SitemapSpider:
             cate_page = self.http.request(method='GET', url=cate_url)
             cate_response_code = cate_page.status
             if cate_response_code != 200:
+                print(cate_url)
                 return 0
             html_parser = etree.HTMLParser()
             cate_page_tree = etree.parse(source=BytesIO(cate_page.data), parser=html_parser)
